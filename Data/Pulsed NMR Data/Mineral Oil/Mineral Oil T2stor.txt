@@ -1,0 +1,13 @@
+ANALOG
+Ch 1 Scale 1.44 V/, Pos 2.898 V, Coup DC, BW Off, Inv Off, Imp 1M Ohm
+     Probe 1 : 1, Skew 0 s
+
+TRIGGER
+Sweep Mode Normal, Coup DC, Noise Rej Off, HF Rej Off, Holdoff 40.0 ns
+Mode EDGE, Source Ch 2, Slope POS, Level 2.25 V
+
+HORIZONTAL
+Mode MAIN, Ref CENT, Main Scale 37 µs/, Main Delay 155 µs
+
+ACQUISITION
+Mode HRES, Realtime On, Vectors On, Persistence Off

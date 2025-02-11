@@ -13,19 +13,20 @@ mu_N = scipy.constants.physical_constants['nuclear magneton'][0]
 h = scipy.constants.h
 
 
-def exponentialFunc(x,a,b,c,d):
-    y = a*np.exp(b*x + c) + d
+def exponentialFunc(x,a,b,c):
+    y = a*np.exp(x/b) + c
     return y
 
 
 def fit_and_plot_T1(filepath, fignum):
     df = pd.read_csv(filepath)
-    fit = curve_fit(exponentialFunc, df['Delay Time (s)'], df['Voltage (V)'], p0=[-41, 0.5, -0.5, 12],
+    fit = curve_fit(exponentialFunc, df['Delay Time (s)'], df['Voltage (V)'], p0=[-25, 2.1, 13],
                     check_finite=True)
 
     popt, pcov = fit[0], fit[1]
+    print(popt)
 
-    x_arr = np.linspace(df['Delay Time (s)'].min(), df['Delay Time (s)'].max(), 1000)
+    x_arr = np.linspace(df['Delay Time (s)'].min(), df['Delay Time (s)'].max(), 100000)
     y_arr = exponentialFunc(x_arr, *popt)
     plt.plot(x_arr, y_arr)
     plt.scatter(df['Delay Time (s)'].values, df['Voltage (V)'].values, color='red')

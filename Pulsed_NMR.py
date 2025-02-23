@@ -42,7 +42,7 @@ def find_T1(filepath, fignum):
     return y_arr
 
 
-def find_T2(filepath, fignum, cutoff=25000, argrelmax_order=1200, min_peak_height=1, windowlength_divisor=1000, leftshift=10000):
+def find_T2(filepath, fignum, cutoff=25000, argrelmax_order=1200, min_peak_height=1, windowlength_divisor=1000, min_time=0, drop_more_indices=False):
 
     plt.figure(fignum)
     df = pd.read_csv(filepath)
@@ -50,14 +50,29 @@ def find_T2(filepath, fignum, cutoff=25000, argrelmax_order=1200, min_peak_heigh
     # removing half the points so savgolfilt doesn't take as long
     odd_indices = np.array(range(1, len(df), 2))
     df.drop(odd_indices, inplace=True)
+    df = df.reset_index()
+
+    if drop_more_indices:
+        odd_indices = np.array(range(1, len(df), 2))
+        df.drop(odd_indices, inplace=True)
+        df = df.reset_index(drop=True)
+
+    print(len(df))
 
     # Centering the signal at zero
     df['1 (VOLT)'] = df['1 (VOLT)'] - np.array(df['1 (VOLT)'])[-1]
 
     # removing the left edge of the signal
-    min_voltage = df['1 (VOLT)'].min()
-    min_ind = df[df['1 (VOLT)'] == min_voltage].index[0] - leftshift
-    df = df.iloc[min_ind:]
+
+    min_index = 0
+    for index, row in df.iterrows():
+        if row['Time (s)'] > min_time:
+            min_index = index
+            break
+
+    left_indices = np.linspace(0, min_index, min_index+1)
+    df.drop(left_indices, inplace=True)
+    df = df.reset_index(drop=True)
 
     # removing the right edge of the signal
     df.drop(df.tail(cutoff).index, inplace=True)
@@ -95,7 +110,7 @@ def find_T2(filepath, fignum, cutoff=25000, argrelmax_order=1200, min_peak_heigh
     popt, pcov = fit[0], fit[1]
     perr = np.sqrt(np.diag(pcov))
 
-    x_arr = np.linspace(0, time[-1], 1000)
+    x_arr = np.linspace(min_time, time[-1], 1000)
     y_arr = exponentialFunc2(x_arr, *popt)
 
     label = f"y = ({popt[0]: .2e} +/- {perr[0]: .2e})exp(-x/({popt[0]: .2e} +/- {perr[0]: .2e})"
@@ -107,40 +122,40 @@ def find_T2(filepath, fignum, cutoff=25000, argrelmax_order=1200, min_peak_heigh
 
 if __name__ == '__main__':
     fignum = 1
-    find_T1('Data/Pulsed NMR Data/Water/WaterT1.csv', fignum)
-    fignum += 1
-
-    find_T1("Data/Pulsed NMR Data/Mineral Oil/Mineral Oil T1.csv", fignum)
-    fignum += 1
-
-    find_T1("Data/Pulsed NMR Data/Light Mineral Oil/Light Mineral Oil T1.csv", fignum)
-    fignum += 1
-
-    find_T1("Data/Pulsed NMR Data/Glycerin/glycerin_T1.csv", fignum)
-    fignum += 1
-
-    find_T1("Data/Pulsed NMR Data/point1MCuSO4/01MCuSO4_T1.csv", fignum)
-    fignum += 1
-
-    find_T1("Data/Pulsed NMR Data/wonMCuSO4/wonMCuSO4_T1.csv", fignum)
-    fignum += 1
-
-    find_T2("Data/Pulsed NMR Data/Mineral Oil/MineralOilT2.csv", fignum, 25000)
-    fignum += 1
-
-    # find_T2("Data/Pulsed NMR Data/Water/WaterT2Data_Cleaned.csv", fignum, 0, argrelmax_order=12000)
+    # find_T1('Data/Pulsed NMR Data/Water/WaterT1.csv', fignum)
+    # fignum += 1
+    #
+    # find_T1("Data/Pulsed NMR Data/Mineral Oil/Mineral Oil T1.csv", fignum)
+    # fignum += 1
+    #
+    # find_T1("Data/Pulsed NMR Data/Light Mineral Oil/Light Mineral Oil T1.csv", fignum)
+    # fignum += 1
+    #
+    # find_T1("Data/Pulsed NMR Data/Glycerin/glycerin_T1.csv", fignum)
+    # fignum += 1
+    #
+    # find_T1("Data/Pulsed NMR Data/point1MCuSO4/01MCuSO4_T1.csv", fignum)
+    # fignum += 1
+    #
+    # find_T1("Data/Pulsed NMR Data/wonMCuSO4/wonMCuSO4_T1.csv", fignum)
     # fignum += 1
 
-    find_T2("Data/Pulsed NMR Data/Light Mineral Oil/Light Mineral Oil Trace.csv", fignum, 25000)
+    # find_T2("Data/Pulsed NMR Data/Mineral Oil/MineralOilT2.csv", fignum, 25000, min_time=0.01)
     fignum += 1
 
-    find_T2("Data/Pulsed NMR Data/Glycerin/Glycerin T2 Trace.csv", fignum, argrelmax_order=500)
+    find_T2("Data/Pulsed NMR Data/Water/WaterT2Data_Cleaned.csv", fignum, 0, argrelmax_order=12000, drop_more_indices=True)
     fignum += 1
 
-    # find_T2("Data/Pulsed NMR Data/point1MCuSO4/01MCuSO4_trace.csv", fignum, argrelmax_order=10000)
+    # find_T2("Data/Pulsed NMR Data/Light Mineral Oil/Light Mineral Oil Trace.csv", fignum, 25000, min_time=0.01)
     # fignum += 1
 
-    find_T2("Data/Pulsed NMR Data/wonMCuSO4/wonMCuSO4_T2_trace.csv", fignum, 25000, windowlength_divisor=1000, leftshift=0, min_peak_height=2)
+    # find_T2("Data/Pulsed NMR Data/Glycerin/Glycerin T2 Trace.csv", fignum, argrelmax_order=500)
+    # fignum += 1
+
+    find_T2("Data/Pulsed NMR Data/point1MCuSO4/01MCuSO4_trace.csv", fignum, argrelmax_order=10000, drop_more_indices=True)
+    # fignum += 1
+
+    # find_T2("Data/Pulsed NMR Data/wonMCuSO4/wonMCuSO4_T2_trace.csv", fignum, 25000, windowlength_divisor=1000, min_peak_height=2, min_time=-2)
 
     for fig in range(1, fignum+1):
         plt.figure(fig)

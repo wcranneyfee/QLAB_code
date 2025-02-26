@@ -3,7 +3,7 @@ import numpy as np
 from SDOM_analysis import SDOM_analysis
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('Data/lab5data(in).csv')
+df = pd.read_csv('../Data/Qlab1/lab5data(in).csv')
 
 
 

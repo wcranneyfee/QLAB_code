@@ -48,7 +48,7 @@ y_offset = {'X': [2, 4, 6, 8, 10],
 
 voltages = np.array([1000, 1500, 2000, 2500, 3000])  # volts
 
-df = pd.read_csv('Data/Lab3forCSV(Sheet1).csv')
+df = pd.read_csv('../Data/Qlab1/Lab3forCSV(Sheet1).csv')
 
 for index, row in df.iterrows():
     for offset_index, x_position in enumerate(y_offset['X']):

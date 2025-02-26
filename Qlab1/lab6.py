@@ -11,11 +11,11 @@ Cs_peak = 0.6617  # MeV
 Co_lower_peak = 1.1732  # MeV
 Co_upper_peak = 1.3325  # MeV
 
-CoAl = pd.read_csv('Data/Lab 7 - Co with Aluminum(Sheet1).csv')
-CoPb = pd.read_csv('Data/Lab 7 - Co with Lead(Sheet1).csv')
-CsPb = pd.read_csv('Data/Lab 7 - Cs with Lead(Sheet1).csv')
-CsAl = pd.read_csv('Data/Lab 7 - Cs with Aluminum(Sheet1).csv')
-NIST_data = pd.read_csv('Data/NIST_data.csv')
+CoAl = pd.read_csv('../Data/Qlab1/Lab 7 - Co with Aluminum(Sheet1).csv')
+CoPb = pd.read_csv('../Data/Qlab1/Lab 7 - Co with Lead(Sheet1).csv')
+CsPb = pd.read_csv('../Data/Qlab1/Lab 7 - Cs with Lead(Sheet1).csv')
+CsAl = pd.read_csv('../Data/Qlab1/Lab 7 - Cs with Aluminum(Sheet1).csv')
+NIST_data = pd.read_csv('../Data/NIST_data.csv')
 
 dfs = [CoAl, CoPb, CsPb, CsAl]
 Co_dfs = [CoAl, CoPb]

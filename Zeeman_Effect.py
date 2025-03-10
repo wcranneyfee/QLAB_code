@@ -77,11 +77,11 @@ def get_peaks(unsplit_filename, split_filename, max_peaks, fignum):
         plt.plot(unsplit_df['alpha'], unsplit_df['I'], color='blue', linewidth=0.5)
         plt.savefig(f"figures/Zeeman_Effect_Figures/{unsplit_filename}2.png")
 
-        for n, peak in enumerate(unsplit_peaks):
-            plt.annotate(f"alpha {n}", (unsplit_df.loc[peak, ['alpha']], unsplit_df.loc[peak, ['I']]))
-
-        for n, peak in enumerate(split_peaks):
-            plt.annotate(f"alpha_split {n}", (split_df.loc[peak, ['alpha']], split_df.loc[peak, ['I']]))
+        # for n, peak in enumerate(unsplit_peaks):
+        #     plt.annotate(f"alpha {n}", (unsplit_df.loc[peak, ['alpha']], unsplit_df.loc[peak, ['I']]))
+        #
+        # for n, peak in enumerate(split_peaks):
+        #     plt.annotate(f"alpha_split {n}", (split_df.loc[peak, ['alpha']], split_df.loc[peak, ['I']]))
 
         FWHM = 0.05
 

@@ -18,7 +18,7 @@ def linear_regression(x_data, y_data, x_err, y_err, print_stuff=False, plots=Tru
     d_inter = perr[0]
     d_slope = perr[1]
 
-    plt.errorbar(x_data, y_data, xerr=x_err, yerr=y_err, fmt='k.', label='Data', capsize=2)
+    plt.errorbar(x_data, y_data, xerr=x_err, yerr=y_err, fmt='k.', capsize=2)
 
     yfit = inter + slope*x_data
     yfit2 = (inter+d_inter) + (slope+d_slope)*x_data

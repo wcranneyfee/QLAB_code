@@ -4,7 +4,7 @@ import pandas as pd
 from scipy.signal import find_peaks
 
 from linear_regression import linear_regression
-import scipy as sp
+from SDOM_analysis import SDOM_analysis
 
 
 def sind(x):
@@ -16,28 +16,15 @@ def cosd(x):
     x = (np.pi / 180) * x
     return np.cos(x)
 
-def get_peaks(unsplit_filename, split_filename, max_peaks, fignum):
+def get_peaks(unsplit_filename, split_filename, max_peaks):
     unsplit_df = pd.read_csv(f"Data/Zeeman Effect/{unsplit_filename}")
     split_df = pd.read_csv(f"Data/Zeeman Effect/{split_filename}")
-
-    plt.figure(fignum)
-    plt.xlabel('alpha (degrees)')
-    plt.ylabel('Intensity')
-    plt.title(split_filename)
 
     pos_peak_list = []
     neg_peak_list = []
     for df in unsplit_df, split_df:
 
         df.loc[abs(df['alpha']) < 2/3, ['I']] = 0
-
-        if df is split_df:
-            color = 'red'
-
-        else:
-            color = 'blue'
-
-        plt.plot(df['alpha'], df['I'], color=color, linewidth=0.5)
 
         peaks = find_peaks((df['I']), width=1)
         peaks = peaks[0]
@@ -70,21 +57,7 @@ def get_peaks(unsplit_filename, split_filename, max_peaks, fignum):
             unsplit_peaks = peaks[0][:max_peaks]
             split_peaks = peaks[1][:2*max_peaks]
 
-        plt.scatter(split_df.loc[split_peaks, ['alpha']], split_df.loc[split_peaks, ['I']], color='red', marker='*')
-        plt.scatter(unsplit_df.loc[unsplit_peaks, ['alpha']], unsplit_df.loc[unsplit_peaks, ['I']], color='blue',
-                    marker='*')
-        plt.plot(split_df['alpha'], split_df['I'], color='red', linewidth=0.5)
-        plt.plot(unsplit_df['alpha'], unsplit_df['I'], color='blue', linewidth=0.5)
-        plt.savefig(f"figures/Zeeman_Effect_Figures/{unsplit_filename}2.png")
-
-        # for n, peak in enumerate(unsplit_peaks):
-        #     plt.annotate(f"alpha {n}", (unsplit_df.loc[peak, ['alpha']], unsplit_df.loc[peak, ['I']]))
-        #
-        # for n, peak in enumerate(split_peaks):
-        #     plt.annotate(f"alpha_split {n}", (split_df.loc[peak, ['alpha']], split_df.loc[peak, ['I']]))
-
         FWHM = 0.05
-
 
         for n, unsplit_peak in enumerate(unsplit_peaks):
 
@@ -154,7 +127,6 @@ def get_delta_E_err(FWHM, a1, a2, deltaE):
     da1 = (np.pi / 180) * FWHM
     da2 = (np.pi / 180) * FWHM
 
-
     a1 = (np.pi / 180) * a1
     a2 = (np.pi / 180) * a2
 
@@ -177,7 +149,6 @@ def get_delta_E_err(FWHM, a1, a2, deltaE):
 def plot_DeltaE_vs_Bfield(current, points, linreg, fignum):
 
     B_field_err = np.array(linreg[0] * linreg[1])
-    B_field_err = 0
 
     slope1_list = []
     slope2_list = []
@@ -187,10 +158,10 @@ def plot_DeltaE_vs_Bfield(current, points, linreg, fignum):
 
         B_field = np.array(linreg[0] * current + linreg[3])
 
-        if n == 0:
+        if n == 0 or n == 4:
             h = len(B_field)
 
-        elif n <= 2:
+        elif n <= 2 or 4 < n <= 6:
             h = -2
 
         else:
@@ -208,8 +179,8 @@ def plot_DeltaE_vs_Bfield(current, points, linreg, fignum):
         slope1, dslope1, _, _ = linear_regression(x_data=B_field, y_data=delta_E_above, x_err=B_field_err, y_err=delta_E_above_err)
         slope2, dslope2, _, _ = linear_regression(x_data=B_field, y_data=delta_E_below, x_err=B_field_err, y_err=delta_E_below_err)
 
-        plt.xlabel('Magnetic Field Strength [T]')
-        plt.ylabel(r'Delta E [$\mu$ eV]')
+        plt.xlabel(r'$B_{ext}$ [T]')
+        plt.ylabel(r'$\Delta E$ [$\mu$ eV]')
         plt.title(f'Peak Number {n+1}')
 
         plt.savefig(f'figures/Zeeman_Effect_Figures/Bfield_vs_deltaE_peak_{n+1}.png')
@@ -229,6 +200,7 @@ fignum = 1
 
 plt.figure(fignum)
 fignum += 1
+
 BvsI = pd.read_csv('Data/Zeeman Effect/Current_vs_Field.csv')
 linreg = linear_regression(x_data=BvsI['Current [A]'], y_data=BvsI['B [mT]']/1000,x_err=BvsI['Current_err'], y_err=BvsI['B_err']/1000)
 plt.xlabel('Current [A]')
@@ -239,37 +211,32 @@ plt.savefig('figures/Zeeman_Effect_Figures/Current_vs_Field.png')
 
 max_peaks = 4
 
-point1 = get_peaks('6A_no_splitting.csv', '6A_splitting.csv', max_peaks=max_peaks, fignum=fignum)
-fignum += 1
+point1 = get_peaks('6A_no_splitting.csv', '6A_splitting.csv', max_peaks=max_peaks)
 
-point2 = get_peaks('5point5A_no_splitting.csv', '5point5A_splitting.csv', max_peaks=max_peaks, fignum=fignum)
-fignum += 1
+point2 = get_peaks('5point5A_no_splitting.csv', '5point5A_splitting.csv', max_peaks=max_peaks)
 
-point3 = get_peaks('5A_no_splitting.csv', '5A_splitting.csv', max_peaks=max_peaks, fignum=fignum)
-fignum += 1
+point3 = get_peaks('5A_no_splitting.csv', '5A_splitting.csv', max_peaks=max_peaks)
 
-point4 = get_peaks('4point5A_no_splitting.csv', '4point5A_splitting.csv', max_peaks=max_peaks, fignum=fignum)
-fignum += 1
+point4 = get_peaks('4point5A_no_splitting.csv', '4point5A_splitting.csv', max_peaks=max_peaks)
 
-point5 = get_peaks('4A_no_splitting.csv', '4A_splitting.csv', max_peaks=max_peaks, fignum=fignum)
-fignum += 1
+point5 = get_peaks('4A_no_splitting.csv', '4A_splitting.csv', max_peaks=max_peaks)
 
-point6 = get_peaks('3point5A_no_splitting.csv', '3point5A_splitting.csv', max_peaks=max_peaks, fignum=fignum)
-fignum += 1
+point6 = get_peaks('3point5A_no_splitting.csv', '3point5A_splitting.csv', max_peaks=max_peaks)
 
-point7 = get_peaks('3A_no_splitting.csv', '3A_splitting.csv', max_peaks=max_peaks, fignum=fignum)
-fignum += 1
+point7 = get_peaks('3A_no_splitting.csv', '3A_splitting.csv', max_peaks=max_peaks)
 
-point8 = get_peaks('2point5A_no_splitting.csv', '2point5A_splitting.csv', max_peaks=max_peaks, fignum=fignum)
-fignum += 1
+point8 = get_peaks('2point5A_no_splitting.csv', '2point5A_splitting.csv', max_peaks=max_peaks)
+
 
 points = [point1, point2, point3, point4, point5, point6, point7, point8]
-current = np.array([6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5])
+current = np.array([6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5]) # A
 
-fignum += 1
 slope1_list, slope2_list, dslope1_list, dslope2_list = plot_DeltaE_vs_Bfield(current, points, linreg, fignum)
 
-for slope1, slope2, dslope1, dslope2 in zip(slope1_list, slope2_list, dslope1_list, dslope2_list):
+
+mub_list = []
+mub_err_list = []
+for n, (slope1, slope2, dslope1, dslope2) in enumerate(zip(slope1_list, slope2_list, dslope1_list, dslope2_list)):
         slope1 = abs(slope1 * 10**-6)
         slope2 = abs(slope2 * 10**-6)
 
@@ -277,10 +244,63 @@ for slope1, slope2, dslope1, dslope2 in zip(slope1_list, slope2_list, dslope1_li
         dslope2 = abs(dslope2 * 10**-6)
 
         slope = (slope1 + slope2) / 2
-        dslope = (dslope1 + dslope2) / 2
+        dslope = 0.5 * np.sqrt(dslope1**2 + dslope2**2)
 
-        print(f"Bohr magneton = {slope} +/- {dslope}")
+        mub_list.append(slope)
+        mub_err_list.append(dslope)
+        print(f"Bohr magneton {n+1} = {slope} +/- {dslope} eV/T")
 
+plt.figure(10)
+SDOM_analysis(len(mub_list), mub_list, mub_err_list, accepted_val=5.788 * 10**-5)
+plt.ylabel(r"$\mu_B$ [eV/T]")
+plt.savefig('figures/Zeeman_Effect_Figures/SDOM_Bohr_Magneton.png')
+plt.xlabel('Peak Number')
+
+""" Now lets just make a pretty graph of peaks for the report """
+plt.figure(11)
+
+unsplit_df = pd.read_csv("Data/Zeeman Effect/6A_splitting.csv")
+split_df = pd.read_csv("Data/Zeeman Effect/6A_no_splitting.csv")
+
+plt.xlabel('alpha (degrees)')
+plt.ylabel('Intensity')
+plt.title('Unsplit Peaks')
+
+
+plt.plot(split_df['alpha'], split_df['I'], color='blue', linewidth=0.5)
+plt.savefig('figures/Zeeman_Effect_Figures/6A_Unsplit_Peaks.png')
+
+plt.figure(12)
+
+plt.xlabel('alpha (degrees)')
+plt.ylabel('Intensity')
+plt.title('Split Peaks')
+
+plt.plot(unsplit_df['alpha'], unsplit_df['I'], color='red', linewidth=0.5)
+plt.savefig('figures/Zeeman_Effect_Figures/6A_Split_Peaks.png')
+
+plt.figure(13)
+
+plt.xlabel('alpha (degrees)')
+plt.ylabel('Intensity')
+plt.title('Combined Peaks at 6A')
+
+plt.plot(unsplit_df['alpha'], unsplit_df['I'], color='blue', linewidth=0.5, label='Unsplit')
+plt.plot(split_df['alpha'], split_df['I'], color='red', linewidth=0.5, label='Split')
+plt.legend()
+plt.savefig('figures/Zeeman_Effect_Figures/Combined_Peaks.png')
+
+plt.figure(14)
+
+plt.xlabel('alpha (degrees)')
+plt.ylabel('Intensity')
+
+plt.title('Combined Peaks at 3A')
+split_df = pd.read_csv("Data/Zeeman Effect/3A_splitting.csv")
+unsplit_df = pd.read_csv("Data/Zeeman Effect/3A_no_splitting.csv")
+plt.plot(unsplit_df['alpha'], unsplit_df['I'], color='blue', linewidth=0.5, label='Unsplit')
+plt.plot(split_df['alpha'], split_df['I'], color='red', linewidth=0.5, label='Split')
+plt.legend()
 
 plt.show()
 

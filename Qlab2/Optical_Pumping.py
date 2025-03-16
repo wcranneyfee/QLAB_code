@@ -5,7 +5,7 @@ from SDOM_analysis import SDOM_analysis
 import pandas as pd
 import scipy
 
-df = pd.read_csv('Data/optical_pumping.csv')
+df = pd.read_csv('../Data/optical_pumping.csv')
 
 mu_0 = scipy.constants.mu_0
 bohrmag = scipy.constants.physical_constants['Bohr magneton'][0]

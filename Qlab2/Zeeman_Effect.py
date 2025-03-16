@@ -201,7 +201,7 @@ fignum = 1
 plt.figure(fignum)
 fignum += 1
 
-BvsI = pd.read_csv('Data/Zeeman Effect/Current_vs_Field.csv')
+BvsI = pd.read_csv('../Data/Zeeman Effect/Current_vs_Field.csv')
 linreg = linear_regression(x_data=BvsI['Current [A]'], y_data=BvsI['B [mT]']/1000,x_err=BvsI['Current_err'], y_err=BvsI['B_err']/1000)
 plt.xlabel('Current [A]')
 plt.ylabel('B [T]')
@@ -259,8 +259,8 @@ plt.xlabel('Peak Number')
 """ Now lets just make a pretty graph of peaks for the report """
 plt.figure(11)
 
-unsplit_df = pd.read_csv("Data/Zeeman Effect/6A_splitting.csv")
-split_df = pd.read_csv("Data/Zeeman Effect/6A_no_splitting.csv")
+unsplit_df = pd.read_csv("../Data/Zeeman Effect/6A_splitting.csv")
+split_df = pd.read_csv("../Data/Zeeman Effect/6A_no_splitting.csv")
 
 plt.xlabel('alpha (degrees)')
 plt.ylabel('Intensity')
@@ -296,8 +296,8 @@ plt.xlabel('alpha (degrees)')
 plt.ylabel('Intensity')
 
 plt.title('Combined Peaks at 3A')
-split_df = pd.read_csv("Data/Zeeman Effect/3A_splitting.csv")
-unsplit_df = pd.read_csv("Data/Zeeman Effect/3A_no_splitting.csv")
+split_df = pd.read_csv("../Data/Zeeman Effect/3A_splitting.csv")
+unsplit_df = pd.read_csv("../Data/Zeeman Effect/3A_no_splitting.csv")
 plt.plot(unsplit_df['alpha'], unsplit_df['I'], color='blue', linewidth=0.5, label='Unsplit')
 plt.plot(split_df['alpha'], split_df['I'], color='red', linewidth=0.5, label='Split')
 plt.legend()

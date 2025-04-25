@@ -7,7 +7,7 @@ def linearFunc(x, intercept, slope):
     return y
 
 
-def linear_regression(x_data, y_data, x_err, y_err, print_stuff=False, plots=True):
+def linear_regression(x_data, y_data, x_err, y_err, print_stuff=False, plots=True, supress_err_fit=False):
     a_fit, pcov = curve_fit(linearFunc, x_data, y_data, sigma=np.sqrt(x_err**2 + y_err**2), absolute_sigma=True, full_output=False)
 
     inter = a_fit[0]
@@ -28,9 +28,9 @@ def linear_regression(x_data, y_data, x_err, y_err, print_stuff=False, plots=Tru
         plt.plot(x_data, yfit, label=f"y={slope:.2e}+/-{d_slope:.1e}x + "
                                      f"{inter:.2e}+/-{d_inter:.1e}", color='r', linestyle='-')
 
-        plt.plot(x_data, yfit2, color='g', linestyle='--', label='uncertainty')
-
-        plt.plot(x_data, yfit3, color='g', linestyle='--')
+        if supress_err_fit is False:
+            plt.plot(x_data, yfit2, color='g', linestyle='--', label='uncertainty')
+            plt.plot(x_data, yfit3, color='g', linestyle='--')
 
         plt.legend()
 

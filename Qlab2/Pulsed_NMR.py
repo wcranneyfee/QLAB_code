@@ -57,8 +57,6 @@ def find_T1(filepath, fignum, change_units=False):
     plt.xlabel(f'Delay Time ({units})')
     plt.ylabel('Voltage (V)')
 
-
-
     print(f"T1 = {popt[1]} +/- {perr[1]} {units}")
     return y_arr
 
@@ -147,42 +145,42 @@ def find_T2(filepath, fignum, cutoff=25000, argrelmax_order=1200, min_peak_heigh
 
 if __name__ == '__main__':
     fignum = 1
-    find_T1('../Data/Pulsed NMR Data/Water/WaterT1.csv', fignum, change_units=True)
+    find_T1('../Data/Qlab2/Pulsed NMR Data/Water/WaterT1.csv', fignum, change_units=True)
     fignum += 1
 
-    find_T1("../Data/Pulsed NMR Data/Mineral Oil/Mineral Oil T1.csv", fignum)
+    find_T1("../Data/Qlab2/Pulsed NMR Data/Mineral Oil/Mineral Oil T1.csv", fignum)
     fignum += 1
 
-    find_T1("../Data/Pulsed NMR Data/Light Mineral Oil/Light Mineral Oil T1.csv", fignum)
+    find_T1("../Data/Qlab2/Pulsed NMR Data/Light Mineral Oil/Light Mineral Oil T1.csv", fignum)
     fignum += 1
 
-    find_T1("../Data/Pulsed NMR Data/Glycerin/glycerin_T1.csv", fignum)
+    find_T1("../Data/Qlab2/Pulsed NMR Data/Glycerin/glycerin_T1.csv", fignum)
     fignum += 1
 
-    find_T1("../Data/Pulsed NMR Data/point1MCuSO4/01MCuSO4_T1.csv", fignum)
+    find_T1("../Data/Qlab2/Pulsed NMR Data/point1MCuSO4/01MCuSO4_T1.csv", fignum)
     fignum += 1
 
-    find_T1("../Data/Pulsed NMR Data/wonMCuSO4/wonMCuSO4_T1.csv", fignum)
+    find_T1("../Data/Qlab2/Pulsed NMR Data/wonMCuSO4/wonMCuSO4_T1.csv", fignum)
     fignum += 1
 
-    find_T2("../Data/Pulsed NMR Data/Mineral Oil/MineralOilT2.csv", fignum, 25000, min_time=0.01)
+    find_T2("../Data/Qlab2/Pulsed NMR Data/Mineral Oil/MineralOilT2.csv", fignum, 25000, min_time=0.01)
     fignum += 1
 
-    find_T2("../Data/Pulsed NMR Data/Water/WaterT2Data_Cleaned.csv", fignum,
+    find_T2("../Data/Qlab2/Pulsed NMR Data/Water/WaterT2Data_Cleaned.csv", fignum,
             0, argrelmax_order=1200, drop_factor=4, windowlength_divisor=3000, polyorder=5, min_peak_height=0.7)
     fignum += 1
 
-    find_T2("../Data/Pulsed NMR Data/Light Mineral Oil/Light Mineral Oil Trace.csv", fignum, cutoff=50000, min_time=0.01)
+    find_T2("../Data/Qlab2/Pulsed NMR Data/Light Mineral Oil/Light Mineral Oil Trace.csv", fignum, cutoff=50000, min_time=0.01)
     fignum += 1
 
-    find_T2("../Data/Pulsed NMR Data/Glycerin/Glycerin T2 Trace.csv", fignum, argrelmax_order=500, min_peak_height=0.8)
+    find_T2("../Data/Qlab2/Pulsed NMR Data/Glycerin/Glycerin T2 Trace.csv", fignum, argrelmax_order=500, min_peak_height=0.8)
     fignum += 1
 
-    find_T2("../Data/Pulsed NMR Data/point1MCuSO4/01MCuSO4_trace.csv", fignum,
+    find_T2("../Data/Qlab2/Pulsed NMR Data/point1MCuSO4/01MCuSO4_trace.csv", fignum,
             argrelmax_order=2000, drop_factor=8, min_peak_height=0.1, windowlength_divisor=60, polyorder=3)
     fignum += 1
 
-    find_T2("../Data/Pulsed NMR Data/wonMCuSO4/wonMCuSO4_T2_trace.csv", fignum,
+    find_T2("../Data/Qlab2/Pulsed NMR Data/wonMCuSO4/wonMCuSO4_T2_trace.csv", fignum,
             25000, windowlength_divisor=50, min_peak_height=1.5, drop_factor=6, argrelmax_order=1500)
 
     for fig in range(1, fignum+1):

@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.signal as sig
 
-Cudf = pd.read_csv('../Data/NMR data/CuSO4widepicclean.csv')
+Cudf = pd.read_csv('../Data/Qlab2/NMR data/CuSO4widepicclean.csv')
 
 # print(Cudf)
 

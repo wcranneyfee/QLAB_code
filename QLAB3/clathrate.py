@@ -619,7 +619,7 @@ class Clathrate:
                         elif name == '24k':
                             wyckoff_24k_atoms = np.vstack((wyckoff_24k_atoms, new_position))
 
-        unit_cube_atoms = [wyckoff_2a_atoms, wyckoff_6c_atoms, wyckoff_6d_atoms, wyckoff_16i_atoms, wyckoff_24k_atoms]
+        unit_cube_atoms = [wyckoff_2a_atoms, wyckoff_6c_atoms,wyckoff_6d_atoms, wyckoff_16i_atoms, wyckoff_24k_atoms]
 
         for ii, wyckoff_atoms in enumerate(unit_cube_atoms):
             unit_cube_atoms[ii] = np.delete(wyckoff_atoms, 0, axis=0)
@@ -749,16 +749,3 @@ def get_only_clathrates_with_max_occupancy(clathrates: list):
         new_clathrates.append(group[ind])
 
     return new_clathrates
-
-
-if __name__ == '__main__':
-    # print(all_clathrates_max_occ)
-    # myClath = all_clathrates[31]
-    # print(myClath.framework)
-    # print(len(all_clathrate_types))
-    print('hi')
-    #
-#     for clathrate_list in all_clathrates_max_occ:
-#         for clathrate in clathrate_list:
-#             print(clathrate.framework)
-
